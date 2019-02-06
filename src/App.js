@@ -3,8 +3,20 @@ import './App.css';
 import Titles from './components/titles';
 import Form from './components/form';
 import Weather from './components/weather';
+import Savedweather from './components/savedweather';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      newItem: "",
+      list: [],
+      isHidden: false
+    };
+  }
+
+
 
   state = {
     temperature: undefined,
@@ -13,6 +25,18 @@ class App extends Component {
     error: undefined
   }
 
+  componentDidMount() {
+    if (this.state.list !== null){
+
+        this.setState({
+          isHidden: !this.state.isHidden
+        })
+      }
+     
+  }
+
+
+ 
   getWeather = async (e) => {
 
     const city = e.target.elements.city.value;
@@ -29,15 +53,17 @@ class App extends Component {
   
     console.log(response);
 
-    if(city && country){
+    if(city && country && response.name !== undefined ){
 
       this.setState({
         temperature: JSON.stringify(response.main.temp),
         city: response.name,
         country: response.sys.country,
-        error: ""
+        error: "",
+        isHidden: false
+    
+      
       })
-
     }else{
       this.setState({
         error: "Anna kaupunki ja maa"
@@ -46,7 +72,37 @@ class App extends Component {
     }  
   }
 
+  addWeather() {
+
+    const newInput = {
+      id: 1+ Math.random(),
+      country: this.state.country,
+      city: this.state.city,
+      temperature: this.state.temperature
+    }
+
+    const list = [...this.state.list];
+
+    list.push(newInput);
+
+    this.setState({
+      list,
+      newInput
+    });
+    
+    console.log(list)
+
+  }
+
+
   render() {
+
+    const Savebutton = () =>(
+      <div>
+      <button id="saveButton" onClick={() => this.addWeather()}> Tallenna </button>
+      </div> 
+   )
+  
     return (
       <div>
         <div className="wrapper">
@@ -67,8 +123,23 @@ class App extends Component {
                 country={this.state.country}
                 error={this.state.error}
               />
+            
+            {!this.state.isHidden && <Savebutton />}
+            
             </div>
-         </div>
+
+            </div>
+            <ul>
+            {this.state.list.map(item => {
+              return (
+                <li key={item.id}>
+                  Maa:{item.country}&nbsp;&nbsp;
+                  Kaupunki:{item.city}&nbsp;&nbsp;
+                  Lämpötila:{item.temperature}&#8451;
+                </li>
+              );
+            })}
+          </ul>
         </div>
         </div>
       </div>
@@ -76,6 +147,7 @@ class App extends Component {
 
     );
   }
+  
 
   
 
