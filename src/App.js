@@ -3,7 +3,7 @@ import './App.css';
 import Titles from './components/titles';
 import Form from './components/form';
 import Weather from './components/weather';
-import Savedweather from './components/savedweather';
+
 
 class App extends Component {
 
@@ -15,7 +15,6 @@ class App extends Component {
       isHidden: false
     };
   }
-
 
 
   state = {
@@ -105,18 +104,20 @@ class App extends Component {
   
     return (
       <div>
-        <div className="wrapper">
-        <div className="main">
-        <div class="container">
-          <div class="row">
-          <div class="col-xs-5 title-container">
+       
+       <div className="container">
+        <div className="jumbotron">
               <Titles />
-          </div>
+        </div>
 
 
-          <div class="col-xs-7 form-container">
+        <div className="row" id="mainRow">
+        <div className="col-sm-4">
+
               <Form loadWeather={this.getWeather} />
-                
+        </div>
+
+        <div className="col-sm-8">        
               <Weather
                 temperature={this.state.temperature}
                 city={this.state.city}
@@ -126,24 +127,37 @@ class App extends Component {
             
             {!this.state.isHidden && <Savebutton />}
             
-            </div>
+        
+        </div>
+        
+        <div className="row" id="saveRow">
+        <table className="table">
 
-            </div>
-            <ul>
+        <thead>
+          <tr>
+            <th>Maa</th>
+            <th>Kaupunki</th>
+            <th>Lämpötila</th>
+          </tr>
+        </thead>
+            
             {this.state.list.map(item => {
               return (
-                <li key={item.id}>
-                  Maa:{item.country}&nbsp;&nbsp;
-                  Kaupunki:{item.city}&nbsp;&nbsp;
-                  Lämpötila:{item.temperature}&#8451;
-                </li>
+                <tbody>
+                  <tr className="success">
+                  <td>{item.country}</td>
+                  <td>{item.city}</td>
+                  <td>{item.temperature}</td>
+                  </tr>
+               </tbody> 
               );
             })}
-          </ul>
+          </table>
         </div>
         </div>
       </div>
-    </div>
+     </div>
+          
 
     );
   }

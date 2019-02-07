@@ -2,7 +2,7 @@ import React from 'react';
 const Titles = (props) =>{
   return (
     <div>
-      <h1>Kaupunkien säät</h1>
+      <h1>Kaupunkien sää haku ja tallennus</h1>
     </div>
   )
 }
